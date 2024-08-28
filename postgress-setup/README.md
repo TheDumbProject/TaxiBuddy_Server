@@ -15,7 +15,7 @@
  First, clone the repository containing the setup script:
  
  ```bash
- git clone https:github.com/your-username/your-repo.git
+ git clone https://github.com/TheDumbProject/TaxiBuddy_Server
  cd your-repo
  ```
  
