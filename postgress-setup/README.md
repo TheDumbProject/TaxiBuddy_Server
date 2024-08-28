@@ -24,7 +24,7 @@
  Execute the setup script to create the database, initialize the schema, and insert some initial data:
  
  ```bash
- psql -U postgres -f setup_db.sql
+ psql -U postgres -f TaxiBuddyDatabase.sql
  ```
  
  Replace `postgres` with your PostgreSQL superuser name if it's different.
@@ -34,7 +34,7 @@
  After setting up, you can access the PostgreSQL database using:
  
  ```bash
- psql -U postgres -d your_database_name
+ psql -U postgres -d taxi_buddy
  ```
  
  Replace `your_database_name` with the name of the database created by the setup script.
@@ -54,7 +54,7 @@
  If you want to switch to a different database:
  
  ```sql
- \c your_database_name
+ \c taxi_buddy
  ```
  
  ### 3. List All Tables
