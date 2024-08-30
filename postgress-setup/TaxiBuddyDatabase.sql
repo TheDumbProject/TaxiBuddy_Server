@@ -10,7 +10,6 @@ CREATE DATABASE taxi_buddy;
 -- Composite Type for Name (FirstName, MiddleName, LastName)
 CREATE TYPE name_type AS (
     FirstName VARCHAR(255),
-    MiddleName VARCHAR(255),
     LastName VARCHAR(255)
 );
 
@@ -18,7 +17,7 @@ CREATE TYPE name_type AS (
 CREATE TABLE Users (
     UserID SERIAL PRIMARY KEY, -- SERIAL is a autoincrement 
     Name name_type, -- Composite attribute for Name
-    ClgEmail VARCHAR(255) UNIQUE NOT NULL,
+    CollegeEmail VARCHAR(255) UNIQUE NOT NULL,
     PhoneNumber VARCHAR(10),
     Password VARCHAR(255),
     ProfilePicturePng TEXT
@@ -28,13 +27,15 @@ CREATE TABLE Users (
 CREATE TABLE Bookings (
     BookingID SERIAL PRIMARY KEY,
     InitiatorID INT REFERENCES Users(UserID),
-    DateTime TIMESTAMP NOT NULL,
+    TimeBooked TIME NOT NULL,
+    DateBooked DATE NOT NULL,
     Vehicle VARCHAR(100),
     SourcePlace VARCHAR(255),
     Destination VARCHAR(255),
     MaxMembers INT,
     CurrentMembers INT
 );
+
 
 -- Messages Table
 CREATE TABLE Messages (
@@ -62,41 +63,74 @@ CREATE TABLE UserBookings (
 );
 
 -- Sample Data Insertion
-INSERT INTO Users (Name, ClgEmail, PhoneNumber, Password) VALUES 
-(ROW('Alice', 'M.', 'Johnson'), 'alice@example.com', '555-1234', 'password123'),
-(ROW('Bob', NULL, 'Smith'), 'bob@example.com', '555-5678', 'password456');
 
-INSERT INTO Bookings (InitiatorID, DateTime, Vehicle, SourcePlace, Destination, MaxMembers, CurrentMembers) VALUES 
-(1, '2024-09-01 08:00:00', 'Sedan', '123 Main St', '456 Elm St', 4, 1),
-(2, '2024-09-02 09:00:00', 'SUV', '789 Oak St', '101 Pine St', 5, 2);
+INSERT INTO Users (
+    Name, CollegeEmail, PhoneNumber, Password, ProfilePicturePng
+) VALUES
+    (ROW('John', 'Doe'), 'john.doe1@college.edu', '9876543210', 'password123', '/images/john_doe.png'),
+    (ROW('Jane', 'Smith'), 'jane.smith2@college.edu', '8765432109', 'password456', '/images/jane_smith.png'),
+    (ROW('Michael', 'Johnson'), 'michael.johnson3@college.edu', '7654321098', 'password789', '/images/michael_johnson.png'),
+    (ROW('Emily', 'Davis'), 'emily.davis4@college.edu', '6543210987', 'password321', '/images/emily_davis.png'),
+    (ROW('Daniel', 'Miller'), 'daniel.miller5@college.edu', '5432109876', 'password654', '/images/daniel_miller.png'),
+    (ROW('Sarah', 'Wilson'), 'sarah.wilson6@college.edu', '4321098765', 'password987', '/images/sarah_wilson.png'),
+    (ROW('David', 'Moore'), 'david.moore7@college.edu', '3210987654', 'password111', '/images/david_moore.png'),
+    (ROW('Sophia', 'Taylor'), 'sophia.taylor8@college.edu', '2109876543', 'password222', '/images/sophia_taylor.png'),
+    (ROW('James', 'Anderson'), 'james.anderson9@college.edu', '1098765432', 'password333', '/images/james_anderson.png'),
+    (ROW('Olivia', 'Thomas'), 'olivia.thomas10@college.edu', '9087654321', 'password444', '/images/olivia_thomas.png'),
+    (ROW('Christopher', 'Jackson'), 'christopher.jackson11@college.edu', '8076543210', 'password555', '/images/christopher_jackson.png'),
+    (ROW('Isabella', 'White'), 'isabella.white12@college.edu', '7065432109', 'password666', '/images/isabella_white.png'),
+    (ROW('Matthew', 'Harris'), 'matthew.harris13@college.edu', '6054321098', 'password777', '/images/matthew_harris.png'),
+    (ROW('Mia', 'Martin'), 'mia.martin14@college.edu', '5043210987', 'password888', '/images/mia_martin.png'),
+    (ROW('Joshua', 'Thompson'), 'joshua.thompson15@college.edu', '4032109876', 'password999', '/images/joshua_thompson.png'),
+    (ROW('Ava', 'Garcia'), 'ava.garcia16@college.edu', '3021098765', 'password000', '/images/ava_garcia.png'),
+    (ROW('Ethan', 'Martinez'), 'ethan.martinez17@college.edu', '2010987654', 'password112', '/images/ethan_martinez.png'),
+    (ROW('Charlotte', 'Robinson'), 'charlotte.robinson18@college.edu', '1009876543', 'password223', '/images/charlotte_robinson.png'),
+    (ROW('Benjamin', 'Clark'), 'benjamin.clark19@college.edu', '9998765432', 'password334', '/images/benjamin_clark.png'),
+    (ROW('Amelia', 'Rodriguez'), 'amelia.rodriguez20@college.edu', '8887654321', 'password445', '/images/amelia_rodriguez.png'),
+    (ROW('Logan', 'Lewis'), 'logan.lewis21@college.edu', '7776543210', 'password556', '/images/logan_lewis.png'),
+    (ROW('Harper', 'Lee'), 'harper.lee22@college.edu', '6665432109', 'password667', '/images/harper_lee.png'),
+    (ROW('Mason', 'Walker'), 'mason.walker23@college.edu', '5554321098', 'password778', '/images/mason_walker.png'),
+    (ROW('Lily', 'Hall'), 'lily.hall24@college.edu', '4443210987', 'password889', '/images/lily_hall.png'),
+    (ROW('Alexander', 'Allen'), 'alexander.allen25@college.edu', '3332109876', 'password990', '/images/alexander_allen.png');
 
-INSERT INTO Messages (UserID, BookingID, TimeSent, MessageTxt) VALUES 
-(1, 1, '2024-08-28 10:00:00', 'Looking forward to the ride!'),
-(2, 2, '2024-08-28 10:30:00', 'Can we stop for coffee on the way?');
+INSERT INTO Bookings (
+    InitiatorID, TimeBooked, DateBooked, Vehicle, SourcePlace, Destination, MaxMembers, CurrentMembers
+) VALUES
+    (7, '10:00', '2024-08-29', 'Car', 'IIITK', 'Ernakulam Junction', 4, 1),
+    (12, '12:30', '2024-08-29', 'Van', 'Kottayam', 'Pala', 8, 3),
+    (11, '12:30', '2024-08-29', 'Van', 'Kottayam', 'Pala', 8, 3),
+    (3, '15:45', '2024-08-30', 'Bus', 'Cochin International airport', 'IIITK', 20, 15),
+    (19, '09:15', '2024-08-31', 'Car', 'Ernakulam Junction', 'Kottayam', 4, 2),
+    (5, '18:00', '2024-08-31', 'SUV', 'Pala', 'Cochin International airport', 6, 4),
+    (10, '14:30', '2024-09-01', 'Van', 'IIITK', 'Pala', 8, 6),
+    (16, '11:45', '2024-09-02', 'Car', 'Kottayam', 'Ernakulam Junction', 4, 1),
+    (8, '17:30', '2024-09-03', 'Bus', 'Cochin International airport', 'Kottayam', 40, 20),
+    (1, '10:00', '2024-09-03', 'Car', 'Pala', 'IIITK', 4, 2),
+    (20, '19:00', '2024-09-04', 'SUV', 'Ernakulam Junction', 'Cochin International airport', 6, 5),
+    (4, '08:30', '2024-09-05', 'Car', 'Kottayam', 'IIITK', 4, 2),
+    (13, '16:00', '2024-09-06', 'Van', 'Cochin International airport', 'Pala', 8, 4),
+    (6, '10:15', '2024-09-07', 'Bus', 'IIITK', 'Cochin International airport', 50, 35),
+    (17, '13:30', '2024-09-08', 'Car', 'Pala', 'Ernakulam Junction', 4, 3),
+    (9, '11:00', '2024-09-09', 'SUV', 'Kottayam', 'Cochin International airport', 6, 4),
+    (2, '18:45', '2024-09-10', 'Van', 'Ernakulam Junction', 'IIITK', 8, 7),
+    (14, '09:30', '2024-09-11', 'Bus', 'Pala', 'Kottayam', 30, 25),
+    (18, '15:00', '2024-09-12', 'Car', 'Cochin International airport', 'Ernakulam Junction', 4, 2),
+    (11, '07:45', '2024-09-13', 'SUV', 'IIITK', 'Kottayam', 6, 5),
+    (15, '17:15', '2024-09-14', 'Bus', 'Kottayam', 'Pala', 40, 30);
 
-INSERT INTO BookingRequests (UserID, BookingID, RequestStatus, TimeSent) VALUES 
-(1, 1, 'Pending', '2024-08-28 11:00:00'),
-(2, 2, 'Accepted', '2024-08-28 11:30:00');
 
-INSERT INTO bookings (initiatorid, datetime, vehicle, sourceplace, destination, maxmembers, currentmembers)
-VALUES 
-    (1, '2024-08-29 10:00:00', 'Car', 'IIITK', 'Ernakulam Junction', 4, 2),
-    (1, '2024-08-30 15:00:00', 'Van', 'Ernakulam Junction', 'Kottayam Railway Station', 6, 5),
-    (1, '2024-08-31 09:00:00', 'Bus', 'Kottayam Railway Station', 'Pala', 20, 15),
-    (1, '2024-09-01 14:30:00', 'Bike', 'Pala', 'Cochin International Airport', 1, 1),
-    (1, '2024-09-02 18:45:00', 'SUV', 'Cochin International Airport', 'IIITK', 5, 3),
-    (1, '2024-09-03 08:00:00', 'Car', 'Ernakulam Junction', 'Pala', 4, 4),
-    (1, '2024-09-04 12:15:00', 'Van', 'IIITK', 'Cochin International Airport', 6, 2),
-    (2, '2024-09-05 14:00:00', 'Bus', 'Kottayam Railway Station', 'Ernakulam Junction', 30, 25),
-    (1, '2024-09-06 09:45:00', 'Car', 'Pala', 'Kottayam Railway Station', 4, 3),
-    (1, '2024-09-07 16:30:00', 'SUV', 'Cochin International Airport', 'Pala', 5, 4),
-    (2, '2024-09-08 07:00:00', 'Van', 'IIITK', 'Ernakulam Junction', 6, 3),
-    (1, '2024-09-09 11:00:00', 'Car', 'Kottayam Railway Station', 'IIITK', 4, 2),
-    (1, '2024-09-10 13:00:00', 'Bike', 'Ernakulam Junction', 'Pala', 1, 1),
-    (1, '2024-09-11 17:00:00', 'Bus', 'Pala', 'Cochin International Airport', 20, 10),
-    (2, '2024-09-12 19:45:00', 'SUV', 'IIITK', 'Ernakulam Junction', 5, 5),
-    (1, '2024-09-13 10:00:00', 'Car', 'Cochin International Airport', 'Kottayam Railway Station', 4, 3),
-    (1, '2024-09-14 15:30:00', 'Van', 'Pala', 'IIITK', 6, 2),
-    (1, '2024-09-15 08:15:00', 'Bus', 'Ernakulam Junction', 'Cochin International Airport', 30, 18),
-    (2, '2024-09-16 14:45:00', 'Car', 'IIITK', 'Pala', 4, 4),
-    (1, '2024-09-17 18:30:00', 'SUV', 'Kottayam Railway Station', 'Cochin International Airport', 5, 4);
+
+INSERT INTO bookingrequests (UserID, BookingID, RequestStatus, TimeSent) VALUES
+(11, 2, 'pending', NOW()),
+(1, 10, 'pending', NOW()),
+(2, 11, 'approved', NOW()),
+(3, 12, 'pending', NOW()),
+(13, 13, 'pending', NOW()),
+(15, 14, 'approved', NOW()),
+(6, 15, 'pending', NOW()),
+(11, 9, 'pending', NOW()),
+(8, 8, 'approved', NOW()),
+(11, 7, 'pending', NOW()),
+(10, 6, 'pending', NOW());
+
+INSERT INTO UserBookings (UserID, BookingID) VALUES (1, 2), (2, 2), (3, 3),(5,2),(7,3),(1,5),(1,17);

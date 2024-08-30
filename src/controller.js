@@ -2,30 +2,103 @@ const { query } = require('express');
 const pool = require('../db');
 const queries = require('./queries');
 
-const getUsers = (req, res) => {
-  pool.query('SELECT * FROM users', (error, result) => {
-    if (error) throw error;
+async function getUser(userId) {
+  console.log('Hello');
+  const result = await pool.query(queries.getUser, [userId]);
+  return result;
+}
 
-    res.status(200).json(result.rows);
-  });
+/*
+Notification add krni hai using websockets*/
+
+const getRequests = async (req, res) => {
+  try {
+    values = [req.body.userId];
+    await pool.query(queries.getRequests, values, (error, result) => {
+      res.status(200).json(result.rows);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred' });
+  }
+};
+
+const cancelRequest = async (req, res) => {
+  try {
+    values = [req.body.requestId, req.body.userId];
+    await pool.query(queries.cancelRequest, values, (error, results) => {
+      res.status(200).json({ Success: 'Request removed Successfully....' });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'An error occured' });
+  }
 };
 
 const searchResult = async (req, res) => {
   try {
     incomingData = {
-      placeFrom: req.body.placeFrom.replace('%20', ' '),
-      placeTo: req.body.placeTo.replace('%20', ' '),
+      userId: req.body.userId,
+      placeFrom: req.body.placeFrom,
+      placeTo: req.body.placeTo,
+      date: req.body.date,
     };
-    values = [incomingData.placeFrom, incomingData.placeTo];
+
+    values = [incomingData.placeFrom, incomingData.placeTo, incomingData.date];
+
     console.log(values);
-    await pool.query(queries.getBookings, values, (error, result) => {
-      if (error) throw error;
-      // console.log(result);
-      res.status(200).json(result.rows);
-    });
+
+    const resultAll = await pool.query(queries.getBookings, values);
+
+    const resultRequests = await pool.query(queries.getRequests, [
+      incomingData.userId,
+    ]);
+
+    // let resultFinal = [];
+    console.log(resultRequests.rows);
+
+    for (const r of resultAll.rows) {
+      const initiatorName = await getUser(r.initiatorid);
+      r['initatorname'] = initiatorName.rows[0].name;
+
+      //getting buddies for a booking
+
+      const buddies = await pool.query(queries.getBuddiesFromBooking, [
+        r.bookingid,
+      ]);
+      r['buddies'] = buddies.rows;
+      r['status'] = 'null';
+      //Adding status parameter
+
+      if (r.initiatorid == incomingData.userId) {
+        r['status'] = 'initiator';
+      }
+
+      resultRequests.rows.forEach((r2) => {
+        if (r2.bookingid == r.bookingid) {
+          r['status'] = r2.requeststatus;
+        }
+      });
+
+      // Removing the locked bookings
+      // if (r.lock == false) {
+      //   resultFinal.push(r);
+      // }
+    }
+
+    res.status(200).json(resultAll.rows);
   } catch (error) {
-    console.log('Error: ', error);
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred' });
   }
+};
+
+const createRequest = (req, res) => {
+  values = [req.body.userId, req.body.bookingId];
+  pool.query(queries.createRequest, values, (error, result) => {
+    if (error) throw error;
+    res.status(200).json({ Success: 'Request sent Successfully....' });
+  });
 };
 
 const createBooking = async (req, res) => {
@@ -44,33 +117,26 @@ const createBooking = async (req, res) => {
   });
 };
 
-const createRequest = (req, res) => {
-  values = [req.body.requestId, req.body.bookingId, 'false'];
-  pool.query(queries.createRequest, value, (error, result) => {
-    if (error) throw error;
-    res.status(200).json({ Success: 'Request sent Successfully' });
-  });
-};
+const getMyBookings = async (req, res) => {
+  try {
+    values = [req.body.userId];
+    const result = await pool.query(queries.getMyBookings, values);
+    for (const r of result.rows) {
+      const initiatorName = await getUser(r.initiatorid);
+      r['initatorname'] = initiatorName.rows[0].name;
+    }
 
-const getRequests = async (req, res) => {
-  values = [req.body.userId];
-  await pool.query(queries.getRequests, values, (error, result) => {
-    res.status(200).json(result);
-  });
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'Error in getting the bookings' });
+  }
 };
-
-const updateRequest = async (req, res) => {
-  values = [req.body.requestId];
-  await pool.query(queries.updateRequest, values, (error, result) => {
-    res.status(200).json(result);
-  });
-};
-
 module.exports = {
-  getUsers,
   searchResult,
   createBooking,
   createRequest,
   getRequests,
-  updateRequest,
+  cancelRequest,
+  getMyBookings,
 };

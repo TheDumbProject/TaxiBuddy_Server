@@ -3,15 +3,22 @@ const controller = require('./controller');
 
 const router = Router();
 
-router.get('/', controller.getUsers);
-
-/* format : {
-  "placeTo":"Ernakulam%20Junction",
-  "placeFrom":"IIITK"
-  
+/* 
+{
+  "userId":"2",
+  "placeTo": "Pala",
+  "placeFrom":"Kottayam",
+  "date":"2024-08-29"
 }
 */
 router.post('/search', controller.searchResult);
+
+/*
+{
+"userId":"2",
+"bookingId":"3"
+} */
+router.post('/createRequest', controller.createRequest);
 
 /* format:{
 "userId":<value>,
@@ -22,12 +29,20 @@ router.post('/search', controller.searchResult);
 "date":<value>,
 "time":<HH:MM>
 } */
-
 router.post('/createBooking', controller.createBooking);
 
-router.post('/createRequest', controller.createRequest);
-
+/*
+{
+"userId":"11"
+}
+ */
 router.post('/getRequests', controller.getRequests);
+/*{
+  "userId":"11",
+  "requestId":"1"
+} */
+router.post('/cancelRequest', controller.cancelRequest);
 
-router.put('/updateRequest', controller.updateRequest);
+router.post('/getMyBookings', controller.getMyBookings);
+
 module.exports = router;
