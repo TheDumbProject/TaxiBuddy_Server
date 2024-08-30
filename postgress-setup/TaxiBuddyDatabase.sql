@@ -77,10 +77,3 @@ CREATE TABLE UserBookings (
 -- (1, 1, '2024-08-28',' 10:00:00', 'Looking forward to the ride!'),
 -- (2, 2, '2024-08-28',' 10:30:00', 'Can we stop for coffee on the way?');
 
--- INSERT INTO BookingRequests (UserID, BookingID, RequestStatus, DateSent,TimeSent) VALUES 
--- (1, 1, 'Pending', '2024-08-28',' 11:00:00'),
--- (2, 2, 'Accepted', '2024-08-28 ','11:30:00');
-
--- INSERT INTO UserBookings (UserID , BookingID) VALUES 
--- (1,1),
--- (2,2);
