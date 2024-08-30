@@ -7,6 +7,21 @@ declare -A firstnameArray
 declare -A middlenameArray 
 declare -A lastnameArray
 
+places=("IIITK" "COCHIN-INTERNATIONAL-AIRPORT" "PALA" "KOTTAYAM" "MUNNAR")
+
+generate_source_and_destination() {
+    local source destination
+    while true; do
+        source=${places[$RANDOM % ${#places[@]}]}
+        destination=${places[$RANDOM % ${#places[@]}]}
+        if [[ "$source" != "$destination" ]]; then
+            echo -n "'$source', '$destination'"
+            # '$SOURCE_PLACE', '$DESTINATION'
+            break
+        fi
+    done
+}
+
 generate_firstname() {
     local firstname
     while true; do
@@ -97,12 +112,10 @@ populate_bookings() {
         TIME_BOOKED=$(generate_time)
         DATE_BOOKED=$(generate_date)
         VEHICLE="Vehicle_$i"
-        SOURCE_PLACE="Source_$i"
-        DESTINATION="Destination_$i"
         MAX_MEMBERS=$((RANDOM % 10 + 1))
         CURRENT_MEMBERS=$((RANDOM % MAX_MEMBERS + 1))
 
-        psql -d $db_name -U $db_user -c "INSERT INTO Bookings (InitiatorID, TimeBooked, DateBooked, Vehicle, SourcePlace, Destination, MaxMembers, CurrentMembers) VALUES ($INITIATOR_ID, '$TIME_BOOKED', '$DATE_BOOKED', '$VEHICLE', '$SOURCE_PLACE', '$DESTINATION', $MAX_MEMBERS, $CURRENT_MEMBERS);"
+        psql -d $db_name -U $db_user -c "INSERT INTO Bookings (InitiatorID, TimeBooked, DateBooked, Vehicle, SourcePlace, Destination, MaxMembers, CurrentMembers) VALUES ($INITIATOR_ID, '$TIME_BOOKED', '$DATE_BOOKED', '$VEHICLE', $(generate_source_and_destination) , $MAX_MEMBERS, $CURRENT_MEMBERS);"
     done
 }
 
@@ -162,7 +175,7 @@ populate_user_bookings() {
     fi
 }
 
-# Prompt for user input and populate tables
+Prompt for user input and populate tables
 echo "How many rows of data do you want to generate? (e.g., 20)"
 read dataPoints
 
