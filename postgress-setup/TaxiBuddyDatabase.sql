@@ -32,6 +32,7 @@ CREATE TABLE Bookings (
     Vehicle VARCHAR(100),
     SourcePlace VARCHAR(255),
     Destination VARCHAR(255),
+    Luggage VARCHAR(100),
     MaxMembers INT,
     CurrentMembers INT
 );
@@ -94,29 +95,29 @@ INSERT INTO Users (
     (ROW('Alexander', 'Allen'), 'alexander.allen25@college.edu', '3332109876', 'password990', '/images/alexander_allen.png');
 
 INSERT INTO Bookings (
-    InitiatorID, TimeBooked, DateBooked, Vehicle, SourcePlace, Destination, MaxMembers, CurrentMembers
+    InitiatorID, TimeBooked, DateBooked, Vehicle, Luggage,SourcePlace, Destination, MaxMembers, CurrentMembers
 ) VALUES
-    (7, '10:00', '2024-08-29', 'Car', 'IIITK', 'Ernakulam Junction', 4, 1),
-    (12, '12:30', '2024-08-29', 'Van', 'Kottayam', 'Pala', 8, 3),
-    (11, '12:30', '2024-08-29', 'Van', 'Kottayam', 'Pala', 8, 3),
-    (3, '15:45', '2024-08-30', 'Bus', 'Cochin International airport', 'IIITK', 20, 15),
-    (19, '09:15', '2024-08-31', 'Car', 'Ernakulam Junction', 'Kottayam', 4, 2),
-    (5, '18:00', '2024-08-31', 'SUV', 'Pala', 'Cochin International airport', 6, 4),
-    (10, '14:30', '2024-09-01', 'Van', 'IIITK', 'Pala', 8, 6),
-    (16, '11:45', '2024-09-02', 'Car', 'Kottayam', 'Ernakulam Junction', 4, 1),
-    (8, '17:30', '2024-09-03', 'Bus', 'Cochin International airport', 'Kottayam', 40, 20),
-    (1, '10:00', '2024-09-03', 'Car', 'Pala', 'IIITK', 4, 2),
-    (20, '19:00', '2024-09-04', 'SUV', 'Ernakulam Junction', 'Cochin International airport', 6, 5),
-    (4, '08:30', '2024-09-05', 'Car', 'Kottayam', 'IIITK', 4, 2),
-    (13, '16:00', '2024-09-06', 'Van', 'Cochin International airport', 'Pala', 8, 4),
-    (6, '10:15', '2024-09-07', 'Bus', 'IIITK', 'Cochin International airport', 50, 35),
-    (17, '13:30', '2024-09-08', 'Car', 'Pala', 'Ernakulam Junction', 4, 3),
-    (9, '11:00', '2024-09-09', 'SUV', 'Kottayam', 'Cochin International airport', 6, 4),
-    (2, '18:45', '2024-09-10', 'Van', 'Ernakulam Junction', 'IIITK', 8, 7),
-    (14, '09:30', '2024-09-11', 'Bus', 'Pala', 'Kottayam', 30, 25),
-    (18, '15:00', '2024-09-12', 'Car', 'Cochin International airport', 'Ernakulam Junction', 4, 2),
-    (11, '07:45', '2024-09-13', 'SUV', 'IIITK', 'Kottayam', 6, 5),
-    (15, '17:15', '2024-09-14', 'Bus', 'Kottayam', 'Pala', 40, 30);
+    (7, '10:00', '2024-08-29', 'Car','1 Cabin Bag', 'IIITK', 'Ernakulam Junction', 4, 1),
+    (12, '12:30', '2024-08-29', 'Van','1 Cabin Bag', 'Kottayam', 'Pala', 8, 3),
+    (11, '12:30', '2024-08-29', 'Van','1 Cabin Bag', 'Kottayam', 'Pala', 8, 3),
+    (3, '15:45', '2024-08-30', 'Bus','1 Cabin Bag', 'Cochin International airport', 'IIITK', 20, 15),
+    (19, '09:15', '2024-08-31', 'Car','1 Cabin Bag', 'Ernakulam Junction', 'Kottayam', 4, 2),
+    (5, '18:00', '2024-08-31', 'SUV', '1 Cabin Bag','Pala', 'Cochin International airport', 6, 4),
+    (10, '14:30', '2024-09-01', 'Van','1 Cabin Bag', 'IIITK', 'Pala', 8, 6),
+    (16, '11:45', '2024-09-02', 'Car','1 Cabin Bag', 'Kottayam', 'Ernakulam Junction', 4, 1),
+    (8, '17:30', '2024-09-03', 'Bus', '1 Cabin Bag','Cochin International airport', 'Kottayam', 40, 20),
+    (1, '10:00', '2024-09-03', 'Car', '1 Cabin Bag','Pala', 'IIITK', 4, 2),
+    (20, '19:00', '2024-09-04', 'SUV','1 Cabin Bag','Ernakulam Junction', 'Cochin International airport', 6, 5),
+    (4, '08:30', '2024-09-05', 'Car','Any', 'Kottayam', 'IIITK', 4, 2),
+    (13, '16:00', '2024-09-06', 'Van','Any', 'Cochin International airport', 'Pala', 8, 4),
+    (6, '10:15', '2024-09-07', 'Bus', '1 Cabin Bag','IIITK', 'Cochin International airport', 50, 35),
+    (17, '13:30', '2024-09-08', 'Car','Any', 'Pala', 'Ernakulam Junction', 4, 3),
+    (9, '11:00', '2024-09-09', 'SUV', '1 Cabin Bag','Kottayam', 'Cochin International airport', 6, 4),
+    (2, '18:45', '2024-09-10', 'Van', '1 Cabin Bag','Ernakulam Junction', 'IIITK', 8, 7),
+    (14, '09:30', '2024-09-11', 'Bus', '1 Cabin Bag','Pala', 'Kottayam', 30, 25),
+    (18, '15:00', '2024-09-12', 'Car', '1 Cabin Bag','Cochin International airport', 'Ernakulam Junction', 4, 2),
+    (11, '07:45', '2024-09-13', 'SUV','1 Cabin Bag', 'IIITK', 'Kottayam', 6, 5),
+    (15, '17:15', '2024-09-14', 'Bus', '1 Cabin Bag','Kottayam', 'Pala', 40, 30);
 
 
 
@@ -134,3 +135,4 @@ INSERT INTO bookingrequests (UserID, BookingID, RequestStatus, TimeSent) VALUES
 (10, 6, 'pending', NOW());
 
 INSERT INTO UserBookings (UserID, BookingID) VALUES (1, 2), (2, 2), (3, 3),(5,2),(7,3),(1,5),(1,17);
+

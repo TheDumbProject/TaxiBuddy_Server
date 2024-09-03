@@ -3,6 +3,12 @@ const controller = require('./controller');
 
 const router = Router();
 
+const myBookings = require('./controllers/MyBookings');
+
+const results = require('./controllers/Results');
+
+const initiatedBookings = require('./controllers/InitiatedBookings');
+
 /* 
 {
   "userId":"2",
@@ -11,14 +17,14 @@ const router = Router();
   "date":"2024-08-29"
 }
 */
-router.post('/search', controller.searchResult);
 
+router.post('/search', results.searchResult);
 /*
 {
 "userId":"2",
 "bookingId":"3"
 } */
-router.post('/createRequest', controller.createRequest);
+router.post('/createRequest', results.createRequest);
 
 /* format:{
 "userId":<value>,
@@ -28,21 +34,31 @@ router.post('/createRequest', controller.createRequest);
 "maxMembers":<value>,
 "date":<value>,
 "time":<HH:MM>
+"luggage":"any"
 } */
-router.post('/createBooking', controller.createBooking);
+router.post('/createBooking', results.createBooking);
 
 /*
 {
 "userId":"11"
 }
  */
-router.post('/getRequests', controller.getRequests);
+// router.post('/getRequestsForId', controller.getRequestsForId);
 /*{
   "userId":"11",
   "requestId":"1"
 } */
-router.post('/cancelRequest', controller.cancelRequest);
+router.post('/cancelRequest', myBookings.cancelRequest);
+/*
+{
+  "userId":"2"
+}*/
+router.post('/getMyBookings', myBookings.getMyBookings);
 
-router.post('/getMyBookings', controller.getMyBookings);
+router.post('/approveRequest', initiatedBookings.updateBooking);
+
+router.post('/getRequestsForBooking', initiatedBookings.getRequestsForBooking);
+
+router.post('/approveRequest', initiatedBookings.approveRequest);
 
 module.exports = router;

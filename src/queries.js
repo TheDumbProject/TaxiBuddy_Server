@@ -1,17 +1,19 @@
 const getBookings =
-  'SELECT * FROM bookings WHERE sourceplace=$1 AND destination=$2 AND datebooked=$3';
+  'SELECT * FROM bookings WHERE sourceplace=$1 AND destination=$2 AND datebooked=$3 AND maxmembers>currentmembers ';
 
 const getUser = 'SELECT name FROM Users WHERE userid=$1';
 
 const createRequest =
   "INSERT INTO bookingrequests (UserID, BookingID, RequestStatus, TimeSent) VALUES ($1, $2, 'Pending', NOW())";
 
-const createBooking = '';
+const createBooking =
+  'INSERT INTO Bookings (InitiatorID, TimeBooked, DateBooked, Vehicle, Luggage,SourcePlace, Destination, MaxMembers, CurrentMembers) VALUES($1,$2,$3,$4,$5,$6,$7,$8)';
 
-const getRequests = 'SELECT * FROM bookingrequests WHERE userid=$1';
+const getRequestsForId =
+  "SELECT b.*,br.requestid FROM Bookings b JOIN BookingRequests br ON b.BookingID = br.BookingID WHERE br.UserID = $1  AND br.RequestStatus = 'pending' ";
 
 const cancelRequest =
-  'DELETE FROM bookingrequests WHERE requestid=$1 and userid=$2';
+  "DELETE FROM bookingrequests WHERE requestid=$1 and userid=$2 and requeststatus='pending'";
 
 const getBuddiesFromBooking =
   'SELECT u.name FROM Users u JOIN UserBookings ub ON u.UserID = ub.UserID WHERE ub.BookingID = $1';
@@ -19,13 +21,38 @@ const getBuddiesFromBooking =
 const getMyBookings =
   'SELECT * FROM Bookings b Join UserBookings ub ON b.bookingid = ub.bookingId WHERE ub.userid = $1';
 
+const updateBooking =
+  'UPDATE Bookings SET Vehicle = $1, MaxMembers = $2 Luggage= $3 WHERE BookingID = $4 AND InitiatorID = $5';
+
+const getRequestsForBooking =
+  'SELECT * FROM bookingrequests WHERE bookingid=$1';
+
+const approveRequest =
+  'UPDATE bookingrequests SET RequestStatus=$1 WHERE userId=$2 AND bookingId=$3';
+
+const addUserToBooking =
+  'INSERT INTO UserBookings (UserID, BookingID) VALUES ($1, $2)';
+
+const removeBuddy = 'DELETE FROM ';
+
+const checkInitiator =
+  'SELECT 1 FROM Bookings WHERE BookingID = $1 AND InitiatorID = $2;';
+
+const updateCurrentMembers =
+  'UPDATE bookings SET CurrentMembers = CurrentMembers+1 WHERE bookingId = $1 AND InitiatorID=$2';
+
 module.exports = {
   getBookings,
   createBooking,
-  getRequests,
+  getRequestsForId,
   cancelRequest,
   createRequest,
   getUser,
   getBuddiesFromBooking,
   getMyBookings,
+  getRequestsForBooking,
+  approveRequest,
+  addUserToBooking,
+  checkInitiator,
+  updateCurrentMembers,
 };
