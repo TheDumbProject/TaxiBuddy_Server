@@ -1,17 +1,29 @@
 const { Router } = require('express');
-const controller = require('./controller');
 
 const router = Router();
 
-router.get('/', controller.getUsers);
+const myBookings = require('./controllers/MyBookings');
 
-/* format : {
-  "placeTo":"Ernakulam%20Junction",
-  "placeFrom":"IIITK"
-  
+const results = require('./controllers/Results');
+
+const initiatedBookings = require('./controllers/InitiatedBookings');
+
+/* 
+{
+  "userId":"2",
+  "placeTo": "Pala",
+  "placeFrom":"Kottayam",
+  "date":"2024-08-29"
 }
 */
-router.post('/search', controller.searchResult);
+
+router.post('/search', results.searchResult);
+/*
+{
+"userId":"2",
+"bookingId":"3"
+} */
+router.post('/createRequest', results.createRequest);
 
 /* format:{
 "userId":<value>,
@@ -21,13 +33,25 @@ router.post('/search', controller.searchResult);
 "maxMembers":<value>,
 "date":<value>,
 "time":<HH:MM>
+"luggage":"any"
 } */
+router.post('/createBooking', results.createBooking);
 
-router.post('/createBooking', controller.createBooking);
+/*
+{
+"userId":"11"
+}
+ */
+// router.post('/getRequestsForId', controller.getRequestsForId);
+/*{
+  "userId":"11",
+  "requestId":"1"
+} */
+router.post('/cancelRequest', myBookings.cancelRequest);
+/*
+{
+  "userId":"2"
+}*/
+router.post('/getMyBookings', myBookings.getMyBookings);
 
-router.post('/createRequest', controller.createRequest);
-
-router.post('/getRequests', controller.getRequests);
-
-router.put('/updateRequest', controller.updateRequest);
 module.exports = router;
