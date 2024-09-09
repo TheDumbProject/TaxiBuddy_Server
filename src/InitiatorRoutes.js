@@ -1,10 +1,11 @@
 const { Router } = require('express');
-const controller = require('./controller');
-
+const initiatedBookings = require('./controllers/InitiatedBookings');
 const router = Router();
 
-router.post('/getRequestsForBooking', controller.getRequestsForBooking);
+router.post('/approveRequest', initiatedBookings.updateBooking);
 
-router.post('/approveRequest', controller.approveRequest);
+router.post('/getRequestsForBooking', initiatedBookings.getRequestsForBooking);
+
+router.post('/approveRequest', initiatedBookings.approveRequest);
 
 module.exports = router;

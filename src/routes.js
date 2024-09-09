@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const controller = require('./controller');
 
 const router = Router();
 
@@ -54,11 +53,5 @@ router.post('/cancelRequest', myBookings.cancelRequest);
   "userId":"2"
 }*/
 router.post('/getMyBookings', myBookings.getMyBookings);
-
-router.post('/approveRequest', initiatedBookings.updateBooking);
-
-router.post('/getRequestsForBooking', initiatedBookings.getRequestsForBooking);
-
-router.post('/approveRequest', initiatedBookings.approveRequest);
 
 module.exports = router;

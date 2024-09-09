@@ -17,6 +17,7 @@ const searchResult = async (req, res) => {
       placeTo: req.body.placeTo,
       date: req.body.date,
     };
+    console.log(req.body);
 
     values = [incomingData.placeFrom, incomingData.placeTo, incomingData.date];
 

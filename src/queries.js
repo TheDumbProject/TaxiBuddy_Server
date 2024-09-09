@@ -41,6 +41,11 @@ const checkInitiator =
 const updateCurrentMembers =
   'UPDATE bookings SET CurrentMembers = CurrentMembers+1 WHERE bookingId = $1 AND InitiatorID=$2';
 
+const insertMessage =
+  'INSERT into Messages (userId,bookingId,TimeSent,MessageTxt) VALUES ($1,$2,NOW(),$3)';
+
+const getMessages =
+  'SELECT * FROM messages WHERE bookingId=$1 ORDER BY TimeSent DESC ';
 module.exports = {
   getBookings,
   createBooking,
@@ -55,4 +60,6 @@ module.exports = {
   addUserToBooking,
   checkInitiator,
   updateCurrentMembers,
+  insertMessage,
+  getMessages,
 };
