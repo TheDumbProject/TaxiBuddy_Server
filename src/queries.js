@@ -7,7 +7,7 @@ const createRequest =
   "INSERT INTO bookingrequests (UserID, BookingID, RequestStatus, TimeSent) VALUES ($1, $2, 'Pending', NOW())";
 
 const createBooking =
-  'INSERT INTO Bookings (InitiatorID, TimeBooked, DateBooked, Vehicle, Luggage,SourcePlace, Destination, MaxMembers, CurrentMembers) VALUES($1,$2,$3,$4,$5,$6,$7,$8)';
+  'INSERT INTO Bookings (InitiatorID, TimeBooked, DateBooked, Vehicle, Luggage,SourcePlace, Destination, MaxMembers, CurrentMembers) VALUES($1,$2,$3,$4,$5,$6,$7,$8,1)';
 
 const getRequestsForId =
   "SELECT b.*,br.requestid FROM Bookings b JOIN BookingRequests br ON b.BookingID = br.BookingID WHERE br.UserID = $1  AND br.RequestStatus = 'pending' ";

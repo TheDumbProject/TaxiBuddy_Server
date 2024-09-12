@@ -19,7 +19,7 @@ const getMyBookings = async (req, res) => {
     //getting initiator name for a booking
     for (const r of result.rows) {
       const initiatorName = await getUser(r.initiatorid);
-      r['initatorname'] = initiatorName.rows[0].name;
+      r['initiatorname'] = initiatorName.rows[0].name;
       const buddies = await pool.query(queries.getBuddiesFromBooking, [
         r.bookingid,
       ]);

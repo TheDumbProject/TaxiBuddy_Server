@@ -74,15 +74,15 @@ const createBooking = async (req, res) => {
       req.body.userId,
       req.body.time,
       req.body.date,
-      req.body.vehicle,
-      req.body.luggage,
+      req.body.vehicleType,
+      req.body.luggageType,
       req.body.placeFrom,
       req.body.placeTo,
       req.body.maxMembers,
     ];
     await pool.query(queries.createBooking, values, (error, result) => {
       if (error) throw error;
-      res.status(200).json({ Success: 'User Created Successfully.' });
+      res.status(200).json({ Success: 'Booking Created Successfully!!' });
     });
   } catch (error) {
     console.error(error);
