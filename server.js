@@ -41,7 +41,9 @@ app.use(
 
 app.use('/', routes);
 
-initiatorRoutes.use(checkInitiator);
+// app.use('/initiator', initiatorRoutes);
+
+// initiatorRoutes.use(checkInitiator);
 
 app.use((req, res) => {
   res.status(404).send('Route not found');

@@ -8,4 +8,9 @@ router.post('/getRequestsForBooking', initiatedBookings.getRequestsForBooking);
 
 router.post('/approveRequest', initiatedBookings.approveRequest);
 
+router.post(
+  '/getBookingsForInitiator',
+  initiatedBookings.getBookingsForInitiator
+);
+
 module.exports = router;

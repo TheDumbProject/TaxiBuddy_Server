@@ -13,9 +13,23 @@ const updateBooking = async (req, res) => {
       req.body.userId,
     ];
     const result = await pool.query(queries.updateBooking, values);
+    res.status(200).json({ message: 'Booking updated successfully' });
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'Error Updating booking' });
+  }
+};
+
+const getBookingsForInitiator = async (req, res) => {
+  try {
+    values = [req.body.userId];
+    const result = await pool.query(queries.getBookingsForInitiator, values);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(400)
+      .json({ message: 'Error getting bookings for the initiator' });
   }
 };
 
@@ -30,7 +44,7 @@ const getRequestsForBooking = async (req, res) => {
     res.status(200).json(result.rows);
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: 'Error getting requests for the booking' });
+    res.status(400).json({ Error: 'Error getting requests for the booking' });
   }
 };
 
@@ -57,7 +71,7 @@ const approveRequest = async (req, res) => {
         req.body.bookingId,
         req.body.userId,
       ]);
-      res.status(200).json({ 'Success: ': 'request updated successfully' });
+      res.status(200).json({ Success: 'Request updated successfully' });
     }
   } catch (error) {
     console.error(error);
@@ -73,8 +87,20 @@ const approveRequest = async (req, res) => {
 //   }
 // }
 
+const getBuddiesFromBooking = async (req, res) => {
+  try {
+    values = [req.body.bookingId];
+    const result = await pool.query(queries.getBuddiesFromBooking, values);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'Error getting buddies from booking' });
+  }
+};
 module.exports = {
   updateBooking,
   getRequestsForBooking,
   approveRequest,
+  getBookingsForInitiator,
+  getBuddiesFromBooking,
 };
