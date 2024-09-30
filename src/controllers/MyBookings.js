@@ -11,6 +11,7 @@ async function getUser(userId) {
   return result;
 }
 //Mybookings
+
 const getMyBookings = async (req, res) => {
   try {
     values = [req.body.userId];
@@ -39,6 +40,7 @@ const getMyBookings = async (req, res) => {
     res.status(400).json({ message: 'Error in getting the bookings' });
   }
 };
+
 /*
   Notification add krni hai using websockets
   */

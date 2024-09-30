@@ -54,4 +54,15 @@ router.post('/cancelRequest', myBookings.cancelRequest);
 }*/
 router.post('/getMyBookings', myBookings.getMyBookings);
 
+router.post(
+  '/getBookingsForInitiator',
+  initiatedBookings.getBookingsForInitiator
+);
+
+router.post('/getRequestsForBooking', initiatedBookings.getRequestsForBooking);
+
+router.post('/getBuddiesFromBooking', initiatedBookings.getBuddiesFromBooking);
+
+router.post('/approveRequest', initiatedBookings.approveRequest);
+
 module.exports = router;
