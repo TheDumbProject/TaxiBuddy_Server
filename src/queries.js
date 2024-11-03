@@ -1,10 +1,12 @@
+const userLookup = 'SELECT * FROM Users WHERE collegeemail=$1';
+
 const getBookings =
   'SELECT * FROM bookings WHERE sourceplace=$1 AND destination=$2 AND datebooked=$3 AND maxmembers>currentmembers ';
 
 const getUser = 'SELECT name FROM Users WHERE userid=$1';
 
 const createRequest =
-  "INSERT INTO bookingrequests (UserID, BookingID, RequestStatus, TimeSent) VALUES ($1, $2, 'Pending', NOW())";
+  "INSERT INTO bookingrequests (UserID, BookingID, RequestStatus, TimeSent) VALUES ($1, $2, 'pending', NOW())";
 
 const createBooking =
   'INSERT INTO Bookings (InitiatorID, TimeBooked, DateBooked, Vehicle, Luggage,SourcePlace, Destination, MaxMembers, CurrentMembers) VALUES($1,$2,$3,$4,$5,$6,$7,$8,1)';
@@ -50,6 +52,9 @@ const getMessages =
 const getBookingsForInitiator =
   'SELECT * FROM Bookings WHERE initiatorid=$1 order by datebooked,timebooked';
 
+const getBookingId =
+  'select * from bookings where initiatorid=$1 order by bookingid desc limit 1';
+
 module.exports = {
   getBookings,
   createBooking,
@@ -67,4 +72,6 @@ module.exports = {
   insertMessage,
   getMessages,
   getBookingsForInitiator,
+  userLookup,
+  getBookingId,
 };

@@ -54,25 +54,25 @@ const approveRequest = async (req, res) => {
     updateType = '';
     if (req.body.updateType == 'accept') {
       updateType = 'approved';
-    } else if (updateType == 'reject') {
+    } else if (req.body.updateType == 'reject') {
       updateType = 'rejected';
     } else {
-      throw error;
+      throw new Error('Wrong updateType');
     }
-    values = [updateType, req.body.userId, req.body.bookingId];
+    values = [updateType, req.body.requesterId, req.body.bookingId];
     await pool.query(queries.approveRequest, values);
 
     if (updateType == 'approved') {
       await pool.query(queries.addUserToBooking, [
-        req.body.userId,
+        req.body.requesterId,
         req.body.bookingId,
       ]);
       await pool.query(queries.updateCurrentMembers, [
         req.body.bookingId,
         req.body.userId,
       ]);
-      res.status(200).json({ Success: 'Request updated successfully' });
     }
+    res.status(200).json({ Success: 'Request updated successfully' });
   } catch (error) {
     console.error(error);
     res.status(400).json({ Error: 'Error approving request' });
@@ -97,6 +97,7 @@ const getBuddiesFromBooking = async (req, res) => {
     res.status(400).json({ message: 'Error getting buddies from booking' });
   }
 };
+
 module.exports = {
   updateBooking,
   getRequestsForBooking,
