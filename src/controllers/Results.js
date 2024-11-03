@@ -84,22 +84,35 @@ const createBooking = async (req, res) => {
       if (error) throw error;
       res.status(200).json({ Success: 'Booking Created Successfully!!' });
     });
+
+    await pool.query(
+      queries.getBookingId,
+      [req.body.userId],
+      async (error, result) => {
+        if (error) throw error;
+        req.body.bookingId = result.rows[0].bookingid;
+        await pool.query(queries.addUserToBooking, [
+          req.body.userId,
+          req.body.bookingId,
+        ]);
+      }
+    );
   } catch (error) {
     console.error(error);
     res.status(402).json({ Error: 'Error Creating booking' });
   }
 };
 
-const createRequest = (req, res) => {
+const createRequest = async (req, res) => {
   try {
     values = [req.body.userId, req.body.bookingId];
-    pool.query(queries.createRequest, values, (error, result) => {
+    await pool.query(queries.createRequest, values, (error, result) => {
       if (error) throw error;
       res.status(200).json({ Success: 'Request sent Successfully....' });
     });
   } catch (error) {
     console.error(error);
-    res.status(400).json({ Error: 'Error Creating Request' });
+    res.status(400).json({ Error: 'Error Joining Request' });
   }
 };
 

@@ -12,7 +12,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
 var cors = require('cors');
-
+const addUserId = require('./src/middlewares/addUserId');
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {

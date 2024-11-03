@@ -8,6 +8,15 @@ const results = require('./controllers/Results');
 
 const initiatedBookings = require('./controllers/InitiatedBookings');
 
+const auth = require('./controllers/Auth');
+const addUserId = require('./middlewares/addUserId');
+
+router.post('/auth', auth.authToken);
+
+router.post('/verify', auth.verify);
+
+router.use(addUserId);
+
 /* 
 {
   "userId":"2",

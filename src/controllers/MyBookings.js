@@ -6,7 +6,6 @@ const queries = require('../queries');
 Notification add krni hai using websockets*/
 
 async function getUser(userId) {
-  console.log('Hello');
   const result = await pool.query(queries.getUser, [userId]);
   return result;
 }
@@ -15,6 +14,7 @@ async function getUser(userId) {
 const getMyBookings = async (req, res) => {
   try {
     values = [req.body.userId];
+    console.log(req.body);
     // Bookings where user is already present
     const result = await pool.query(queries.getMyBookings, values);
     //getting initiator name for a booking
