@@ -70,7 +70,7 @@ const searchResult = async (req, res) => {
 
 const createBooking = async (req, res) => {
   try {
-    values = [
+    const values = [
       req.body.userId,
       req.body.time,
       req.body.date,
@@ -80,26 +80,21 @@ const createBooking = async (req, res) => {
       req.body.placeTo,
       req.body.maxMembers,
     ];
-    await pool.query(queries.createBooking, values, (error, result) => {
-      if (error) throw error;
-      res.status(200).json({ Success: 'Booking Created Successfully!!' });
-    });
 
-    await pool.query(
-      queries.getBookingId,
-      [req.body.userId],
-      async (error, result) => {
-        if (error) throw error;
-        req.body.bookingId = result.rows[0].bookingid;
-        await pool.query(queries.addUserToBooking, [
-          req.body.userId,
-          req.body.bookingId,
-        ]);
-      }
-    );
+    // Insert booking and await the result
+    await pool.query(queries.createBooking, values);
+
+    // Retrieve booking ID
+    const result = await pool.query(queries.getBookingId, [req.body.userId]);
+    const bookingId = result.rows[0].bookingid;
+
+    // Add user to booking with the obtained bookingId
+    await pool.query(queries.addUserToBooking, [req.body.userId, bookingId]);
+
+    res.status(200).json({ Success: 'Booking Created Successfully!' });
   } catch (error) {
     console.error(error);
-    res.status(402).json({ Error: 'Error Creating booking' });
+    res.status(500).json({ Error: 'Error Creating booking' });
   }
 };
 
