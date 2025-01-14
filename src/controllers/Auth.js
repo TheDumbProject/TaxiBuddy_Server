@@ -1,11 +1,10 @@
 const { query } = require('express');
+require('dotenv').config();
 const pool = require('../../db');
 const queries = require('../queries');
 const jwt = require('jsonwebtoken');
 const json = require('body-parser/lib/types/json');
-const jwtSecretKey =
-  '4U7bvJVkuep7bLX8e+Y/VBzhgtADOcN1Ipn/9mGSDZtidy0i19wMBXquuOxGAfFEJMzRi095Oq9LUpF1n8hrEg==';
-
+const jwtSecretKey = process.env.JWT_SECRET;
 const authToken = async (req, res) => {
   try {
     const [email, password] = [req.body.email, req.body.password];
@@ -45,8 +44,11 @@ const verify = async (req, res) => {
 
     if (verified) {
       res.status(200).json({ message: 'verified' });
+    } else {
+      res.status(400).send('Could not verify');
     }
   } catch (error) {
+    // console.log(verified);
     console.log(error);
     res.status(400).send('Invalid Token');
   }

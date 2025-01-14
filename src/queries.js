@@ -15,10 +15,10 @@ const getRequestsForId =
   "SELECT b.*,br.requestid FROM Bookings b JOIN BookingRequests br ON b.BookingID = br.BookingID WHERE br.UserID = $1  AND br.RequestStatus = 'pending' ";
 
 const cancelRequest =
-  "DELETE FROM bookingrequests WHERE requestid=$1 and userid=$2 and requeststatus='pending'";
+  "update bookingrequests set requeststatus='rejected' where requestid=$1 and userid=$2";
 
 const getBuddiesFromBooking =
-  'SELECT u.name,u.phonenumber FROM Users u JOIN UserBookings ub ON u.UserID = ub.UserID WHERE ub.BookingID = $1';
+  'SELECT u.name FROM Users u JOIN UserBookings ub ON u.UserID = ub.UserID WHERE ub.BookingID = $1';
 
 const getMyBookings =
   'SELECT * FROM Bookings b Join UserBookings ub ON b.bookingid = ub.bookingId WHERE ub.userid = $1';
@@ -55,6 +55,20 @@ const getBookingsForInitiator =
 const getBookingId =
   'select * from bookings where initiatorid=$1 order by bookingid desc limit 1';
 
+const checkRequest =
+  "select * from bookingrequests where userid=$1 and bookingid=$2 and requeststatus='pending'";
+
+const getChatsForBooking =
+  'SELECT * FROM Messages WHERE bookingId=$1 order by timesent asc';
+
+const checkIfUserIsInBooking =
+  'Select * from UserBookings where userid=$1 and bookingid=$2';
+
+const checkSameBooking =
+  'select * from bookings where initiatorid=$1 and datebooked=$2 and sourceplace=$3 and destination=$4';
+
+const verifyEmail = 'select * from users where collegeemail=$1';
+
 module.exports = {
   getBookings,
   createBooking,
@@ -74,4 +88,9 @@ module.exports = {
   getBookingsForInitiator,
   userLookup,
   getBookingId,
+  checkRequest,
+  checkSameBooking,
+  getChatsForBooking,
+  verifyEmail,
+  checkIfUserIsInBooking,
 };

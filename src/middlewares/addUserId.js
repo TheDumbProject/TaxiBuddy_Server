@@ -1,16 +1,16 @@
 const jwt = require('jsonwebtoken');
-
-const jwtSecretKey =
-  '4U7bvJVkuep7bLX8e+Y/VBzhgtADOcN1Ipn/9mGSDZtidy0i19wMBXquuOxGAfFEJMzRi095Oq9LUpF1n8hrEg==';
-
+require('dotenv').config();
+const jwtSecretKey = process.env.JWT_SECRET;
 const addUserId = (req, res, next) => {
   try {
     if (!req.headers) {
-      return res.status(401).json({ message: 'No headers found' });
+      return res.status(401).json({ Error: 'No headers found' });
     }
     const token = req.headers['authorization'];
+    console.log(req.headers);
+
     if (!token) {
-      next();
+      return res.status(401).json({ Error: 'No token found in the header' });
     }
 
     const decoded = jwt.verify(token, jwtSecretKey);
@@ -21,7 +21,7 @@ const addUserId = (req, res, next) => {
   } catch (error) {
     console.error(error);
     console.log('error in addUserId');
-    return res.status(401).json({ message: 'Token is not valid' });
+    return res.status(401).json({ Error: 'Token is not valid' });
   }
 };
 

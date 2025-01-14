@@ -54,6 +54,14 @@ io.on('connection', (socket) => {
   console.log('User connected: ', socket.id);
   //on joining a booking
   socket.on('joinbooking', (bookingId) => {
+    socket.rooms.forEach((room) => {
+      if (room !== socket.id) {
+        // Skip the socket's own ID room
+
+        socket.leave(`booking_${bookingId}`);
+        console.log(`Socket ${socket.id} left room: ${room}`);
+      }
+    });
     socket.join(`booking_${bookingId}`);
     console.log(`User ${socket.id} joined booking_${bookingId}`);
   });
@@ -66,14 +74,14 @@ io.on('connection', (socket) => {
         bookingId,
         messageText,
       ]);
-      console.log({
-        userId: userId,
-        bookingId: bookingId,
-        messageText: messageText,
-      });
+      // console.log({
+      //   userId: userId,
+      //   bookingId: bookingId,
+      //   messageText: messageText,
+      // });
       const resultFetch = await pool.query(queries.getMessages, [bookingId]);
       const message = resultFetch.rows[0];
-      console.log(message);
+      // console.log(message);
 
       // console.log(resultFetch.rows);
 
@@ -86,6 +94,10 @@ io.on('connection', (socket) => {
     } catch (error) {
       console.error(error);
     }
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected', socket.id);
   });
 });
 

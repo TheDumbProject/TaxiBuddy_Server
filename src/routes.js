@@ -4,32 +4,37 @@ const router = Router();
 
 const myBookings = require('./controllers/MyBookings');
 
+const Messages = require('./controllers/Messages');
+
 const results = require('./controllers/Results');
 
 const initiatedBookings = require('./controllers/InitiatedBookings');
 
 const auth = require('./controllers/Auth');
 const addUserId = require('./middlewares/addUserId');
+const verifyEmail = require('./controllers/verifyEmail');
 
 router.post('/auth', auth.authToken);
-
 router.post('/verify', auth.verify);
 
 router.use(addUserId);
 
+router.post('/verifyEmail', verifyEmail);
 /* 
 {
-  "userId":"2",
   "placeTo": "Pala",
   "placeFrom":"Kottayam",
   "date":"2024-08-29"
 }
 */
 
+router.post('/sendMessage', Messages.sendMessage);
+
 router.post('/search', results.searchResult);
 /*
-{
-"userId":"2",
+
+
+
 "bookingId":"3"
 } */
 router.post('/createRequest', results.createRequest);
@@ -74,4 +79,5 @@ router.post('/getBuddiesFromBooking', initiatedBookings.getBuddiesFromBooking);
 
 router.post('/approveRequest', initiatedBookings.approveRequest);
 
+router.post('/getChatsForBooking', myBookings.getChatsForBooking);
 module.exports = router;

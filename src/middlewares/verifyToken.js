@@ -3,9 +3,7 @@ require('dotenv').config();
 
 // const secret = process.env.SUPABASE_SECRET;
 
-const jwtSecretKey =
-  '4U7bvJVkuep7bLX8e+Y/VBzhgtADOcN1Ipn/9mGSDZtidy0i19wMBXquuOxGAfFEJMzRi095Oq9LUpF1n8hrEg==';
-
+const jwtSecretKey = process.env.JWT_SECRET;
 const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
   console.log(token);
