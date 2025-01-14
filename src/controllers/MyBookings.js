@@ -73,7 +73,27 @@ const cancelRequest = async (req, res) => {
   }
 };
 
+const getChatsForBooking = async (req, res) => {
+  try {
+    const checkIfUserIsInBooking = await pool.query(
+      queries.checkIfUserIsInBooking,
+      [req.body.userId, req.body.bookingId]
+    );
+    console.log(checkIfUserIsInBooking);
+    if (checkIfUserIsInBooking.rows.length === 0) {
+      return res.status(400).json({ message: 'User is not in the booking' });
+    }
+    values = [req.body.bookingId];
+    const result = await pool.query(queries.getChatsForBooking, values);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'Error getting chats for the booking' });
+  }
+};
+
 module.exports = {
   getMyBookings,
   cancelRequest,
+  getChatsForBooking,
 };

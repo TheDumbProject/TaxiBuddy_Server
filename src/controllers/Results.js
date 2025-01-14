@@ -3,7 +3,7 @@ const pool = require('../../db');
 const queries = require('../queries');
 
 async function getUser(userId) {
-  console.log('Hello');
+  // console.log('Hello');
   const result = await pool.query(queries.getUser, [userId]);
   return result;
 }
@@ -23,28 +23,32 @@ const searchResult = async (req, res) => {
 
     console.log(values);
 
+    // Get all the bookings for a particular date and location
     const resultAll = await pool.query(queries.getBookings, values);
 
+    // Get all the bookings that user has sent requests to
+    // Using this to show the status in a booking
     const resultRequests = await pool.query(queries.getRequestsForId, [
       incomingData.userId,
     ]);
 
     // let resultFinal = [];
+    console.log(resultAll.rows);
     console.log(resultRequests.rows);
 
     for (const r of resultAll.rows) {
+      //Setting the initiator name for a booking
       const initiatorName = await getUser(r.initiatorid);
       r['initatorname'] = initiatorName.rows[0].name;
 
-      //getting buddies for a booking
-
+      //Getting buddies for a booking
       const buddies = await pool.query(queries.getBuddiesFromBooking, [
         r.bookingid,
       ]);
       r['buddies'] = buddies.rows;
       r['status'] = 'null';
-      //Adding status parameter
 
+      //Adding status parameter
       if (r.initiatorid == incomingData.userId) {
         r['status'] = 'initiator';
       }
@@ -64,7 +68,9 @@ const searchResult = async (req, res) => {
     res.status(200).json(resultAll.rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'An error occurred' });
+    res
+      .status(500)
+      .json({ message: 'An error occurred searching the bookings' });
   }
 };
 
@@ -80,6 +86,23 @@ const createBooking = async (req, res) => {
       req.body.placeTo,
       req.body.maxMembers,
     ];
+
+    // Check if the booking for the same date and same journey exists
+    const existingBooking = await pool.query(queries.checkSameBooking, [
+      req.body.userId,
+      req.body.date,
+      req.body.placeFrom,
+      req.body.placeTo,
+    ]);
+
+    if (existingBooking.rows.length != 0) {
+      return res
+        .status(401)
+        .json({
+          Error:
+            'Booking for the same journey already exists for the same date',
+        });
+    }
 
     // Insert booking and await the result
     await pool.query(queries.createBooking, values);
@@ -101,9 +124,19 @@ const createBooking = async (req, res) => {
 const createRequest = async (req, res) => {
   try {
     values = [req.body.userId, req.body.bookingId];
+
+    //Checking if the request already exists
+    const result = await pool.query(queries.checkRequest, [
+      req.body.userId,
+      req.body.bookingId,
+    ]);
+    if (result.rows.length != 0) {
+      return res.status(400).json({ Error: 'Request already exists' });
+    }
+
     await pool.query(queries.createRequest, values, (error, result) => {
-      if (error) throw error;
-      res.status(200).json({ Success: 'Request sent Successfully....' });
+      // if (error) throw error;
+      res.status(200).json({ Success: 'Request sent Successfully' });
     });
   } catch (error) {
     console.error(error);
